@@ -1,0 +1,162 @@
+{
+	"_version": "1.12.0",
+
+	"sap.app": {
+		"id": "myapp.ui5",
+		"type": "application",
+		"i18n": "i18n/i18n.properties",
+		"title": "{{appTitle}}",
+		"description": "{{appDescription}}",
+		"applicationVersion": {
+			"version": "${version}"
+		},
+		"dataSources": {
+      "mainService": {
+        "uri": "/sap/opu/odata/sap/ZODATA_LEAVE_REQUEST_SRV/",
+        "type": "OData",
+        "settings": {
+          "annotations": [],
+          "localUri": "localService/mainService/metadata.xml",
+          "odataVersion": "2.0"
+        }
+      }
+    }
+	},
+
+
+	"sap.ui": {
+		"technology": "UI5",
+		"icons": {},
+		"deviceTypes": {
+			"desktop": true,
+			"tablet": true,
+			"phone": true
+		}
+	},
+
+	"sap.ui5": {
+		"rootView": {
+			"viewName": "myapp.ui5.view.App",
+			"type": "XML",
+			"id": "app"
+		},
+
+		"dependencies": {
+			"minUI5Version": "1.135.0",
+			"libs": {
+				"sap.ui.core": {},
+				"sap.m": {},
+				"sap.uxap": {},
+				 "sap.ui.export": {}
+			}
+		},
+
+		"handleValidation": true,
+
+		"contentDensities": {
+			"compact": true,
+			"cozy": true
+		},
+
+		"models": {
+			"i18n": {
+				"type": "sap.ui.model.resource.ResourceModel",
+				"settings": {
+					"bundleName": "myapp.ui5.i18n.i18n",
+					"supportedLocales": [
+						"en",
+						"de"
+					],
+					"fallbackLocale": "en",
+					"async": true
+				}
+			},
+			"": {
+        "dataSource": "mainService",
+        "preload": true,
+        "settings": {}
+      }
+		},
+
+
+		"routing": {
+			"config": {
+				"routerClass": "sap.m.routing.Router",
+				"viewType": "XML",
+				"viewPath": "myapp.ui5.view",
+				"controlId": "app",
+				"controlAggregation": "pages",
+				"bypassed": {
+					"target": "notFound"
+				}
+			},
+			"routes": [
+				{
+					"name": "RouteMain",
+          "pattern": ":?query:",
+          "target": ["TargetMain"]
+				},
+        {
+          "name": "create",
+          "pattern": "create",
+          "target": "create"
+        },
+        {
+          "name": "edit",
+          "pattern": "edit/{requestId}",
+          "target": "edit"
+        },
+        {
+          "pattern": "request/{requestId}",
+          "name": "details",
+          "target": "details"
+        },
+        {
+          "name": "approve",
+          "pattern": "approve",
+          "target": "approve"
+        }
+			],
+			"targets": {
+				"TargetMain": {
+          "viewType": "XML",
+          "transition": "slide",
+          "clearControlAggregation": false,
+          "viewId": "Main",
+          "viewName": "Main"
+        },
+        "notFound": {
+          "viewId": "notFound",
+          "viewName": "NotFound",
+          "title": "{i18n>appTitle}"
+        },
+        "create": {
+          "viewId": "create",
+          "viewName": "Create"
+        },
+        "edit": {
+          "viewId": "edit",
+          "viewName": "Edit"
+        },
+        "details": {
+          "viewId": "details",
+          "viewName": "Details"
+        },
+        "approve": {
+          "viewId": "approve",
+          "viewName": "Approve"
+        },
+        "processSuccess": {
+          "viewId": "processSuccess",
+          "viewName": "message.ProcessSuccess",
+          "title": "{i18n>appTitle}"
+        },
+        "processError": {
+          "viewId": "processError",
+          "viewName": "message.ProcessError",
+          "title": "{i18n>appTitle}"
+        }
+			}
+		}
+	}
+}

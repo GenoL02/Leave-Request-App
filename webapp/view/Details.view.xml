@@ -1,0 +1,62 @@
+<mvc:View
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:form="sap.ui.layout.form"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:uxap="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+    xmlns:core="sap.ui.core"
+    height="100%"
+    controllerName="myapp.ui5.controller.Details"
+>
+    <uxap:ObjectPageLayout
+        id="createObjectPageLayout1"
+        enableLazyLoading="true"
+        useIconTabBar="true"
+        showTitleInHeaderContent="true"
+        upperCaseAnchorBar="false"
+        showFooter="false"
+        busy="{view>/busy}"
+        busyIndicatorDelay="{view>/delay}"
+    >
+        <uxap:headerTitle>
+            <uxap:ObjectPageDynamicHeaderTitle>
+                <uxap:expandedHeading>
+                    <Title
+                        text="Leave Request Details"
+                        wrapping="true"
+                    />
+                </uxap:expandedHeading>
+
+                <uxap:snappedHeading>
+                    <Title
+                        text="Leave Request Details"
+                        wrapping="true"
+                    />
+                </uxap:snappedHeading>
+
+                <uxap:actions>
+                    <Button
+                        type="Back"
+                        text="Back to Work List"
+                        press="onBackToWorkList"
+                    />
+                </uxap:actions>
+            </uxap:ObjectPageDynamicHeaderTitle>
+        </uxap:headerTitle>
+
+        <uxap:headerContent>
+            <HeaderContainer
+                id="HeaderContent"
+                showDividers="false"
+            >
+                <VBox>
+                    <Title
+                        text="Thông tin người tạo"
+                        class="sapUiTinyMarginBottom"
+                    />
+                </VBox>
+            </HeaderContainer>
+        </uxap:headerContent>
+    </uxap:ObjectPageLayout>
+</mvc:View>

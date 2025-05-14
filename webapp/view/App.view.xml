@@ -1,0 +1,9 @@
+<mvc:View
+    controllerName="myapp.ui5.controller.App"
+    xmlns:html="http://www.w3.org/1999/xhtml"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+>
+    <App id="app" />
+</mvc:View>

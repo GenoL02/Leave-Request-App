@@ -1,0 +1,219 @@
+<mvc:View
+    controllerName="myapp.ui5.controller.Main"
+    displayBlock="true"
+    xmlns="sap.m"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns:core="sap.ui.core"
+    core:require="{
+		formatter: 'myapp/ui5/model/formatter'
+	}"
+    xmlns:uxap="sap.uxap"
+    xmlns:layout="sap.ui.layout"
+    xmlns:table="sap.ui.table"
+    xmlns:rowmodes="sap.ui.table.rowmodes"
+    xmlns:form="sap.ui.layout.form"
+    height="100%"
+>
+    <uxap:ObjectPageLayout
+        id="ObjectPageLayout"
+        enableLazyLoading="true"
+        beforeNavigate="onBeforeNavigate"
+        useIconTabBar="true"
+        showTitleInHeaderContent="true"
+        upperCaseAnchorBar="false"
+        showFooter="true"
+        busy="{view>/busy}"
+        busyIndicatorDelay="{view>delay}"
+    >
+        <uxap:headerTitle>
+            <uxap:ObjectPageDynamicHeaderTitle>
+                <uxap:expandedHeading>
+                    <Title
+                        text="Leave Request"
+                        wrapping="true"
+                    />
+                </uxap:expandedHeading>
+
+                <uxap:snappedHeading>
+                    <Title
+                        text="Leave Request"
+                        wrapping="true"
+                    />
+                </uxap:snappedHeading>
+                <uxap:actions />
+            </uxap:ObjectPageDynamicHeaderTitle>
+        </uxap:headerTitle>
+
+        <uxap:headerContent />
+
+        <uxap:sections>
+            <uxap:ObjectPageSection
+                titleUppercase="false"
+                id="objectPageSection"
+                title="Leave Request"
+                showTitle="false"
+            >
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection
+                        id="objectPageSubSection"
+                        titleUppercase="false"
+                        title="Leave Request"
+                        showTitle="false"
+                    >
+                        <uxap:blocks>
+                            <table:Table
+                                id="table"
+                                enableSelectAll="false"
+                                selectionMode="Single"
+                                enableBusyIndicator="true"
+                                rowSelectionChange="onRowSelectionChange"
+                                busyIndicatorDelay="{view>/delay}"
+                                rowActionCount="2"
+                                rows="{table>/rows}"
+                            >
+                                <table:extension>
+                                    <OverflowToolbar>
+                                        <Title text="Leave Request List" />
+                                        <ToolbarSpacer />
+                                        <Button
+                                            icon="sap-icon://add"
+                                            tooltip="Create Leave Request"
+                                            text="Create Leave Request"
+                                            type="Emphasized"
+                                            press="onNavigateToCreateRequest"
+                                        />
+                                        <Button
+                                            icon="sap-icon://delete"
+                                            tooltip="Delete Leave Request"
+                                            text="Delete Leave Request"
+                                            type="Reject"
+                                            enabled="{= ${table>/selectedRows}.length > 0 }"
+                                            press="onDeleteRequests"
+                                        />
+                                        <ToolbarSeparator />
+                                        <Button
+                                            icon="sap-icon://excel-attachment"
+                                            tooltip="Export to Excel"
+                                            press="onExportExcel"
+                                        />
+                                    </OverflowToolbar>
+                                </table:extension>
+                                <table:noData>
+                                    <IllustratedMessage
+                                        illustrationType="sapIllus-NoSearchResults"
+                                        illustrationSize="Base"
+                                        enableVerticalResponsiveness="true"
+                                        enableDefaultTitleAndDescription="false"
+                                        description="No Data"
+                                    />
+                                </table:noData>
+                                <table:columns>
+                                    <table:Column
+                                        id="RequestId"
+                                        width="8rem"
+                                    >
+                                        <table:label>
+                                            <Label text="Mã đơn nghỉ" />
+                                        </table:label>
+                                        <table:template>
+                                            <ObjectIdentifier
+                                                title="{table>RequestId}"
+                                                titleActive="true"
+                                                titlePress="onNavigateToDetails"
+                                            />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column id="LeaveType">
+                                        <table:label>
+                                            <Label text="Loại phép" />
+                                        </table:label>
+                                        <table:template>
+                                            <Text text="{table>LeaveType}" />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column
+                                        id="StartDate"
+                                        width="8rem"
+                                    >
+                                        <table:label>
+                                            <Label text="Ngày bắt đầu" />
+                                        </table:label>
+                                        <table:template>
+                                            <Text
+                                                text="{
+                                                    path: 'table>StartDate',
+                                                    formatter: '.formatter.formatDate'
+                                                }"
+                                            />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column
+                                        id="EndDate"
+                                        width="8rem"
+                                    >
+                                        <table:label>
+                                            <Label text="Ngày kết thúc" />
+                                        </table:label>
+                                        <table:template>
+                                            <Text
+                                                text="{
+                                                    path: 'table>EndDate',
+                                                    formatter: '.formatter.formatDate'
+                                                }"
+                                            />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column id="Reason">
+                                        <table:label>
+                                            <Label text="Lý do" />
+                                        </table:label>
+                                        <table:template>
+                                            <Text text="{table>Reason}" />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column
+                                        id="Status"
+                                        width="7rem"
+                                    >
+                                        <table:label>
+                                            <Label text="Trạng thái" />
+                                        </table:label>
+                                        <table:template>
+                                            <ObjectStatus
+                                                text="{table>Status}"
+                                                inverted="true"
+                                                state="{
+                                                    path: 'table>Status',
+                                                    formatter: '.formatter.formatStatus'
+                                                }"
+                                            />
+                                        </table:template>
+                                    </table:Column>
+                                </table:columns>
+                                <table:rowActionTemplate>
+                                    <table:RowAction>
+                                        <table:RowActionItem
+                                            type="Custom"
+                                            text="Edit"
+                                            icon="sap-icon://edit"
+                                            visible="{= ${table>Status} === 'Draft' }"
+                                            press="onNavigateToEditRequest"
+                                        />
+                                        <table:RowActionItem
+                                            type="Delete"
+                                            visible="{= ${table>Status} === 'Draft' }"
+                                            press="onDeleteRequest"
+                                        />
+                                    </table:RowAction>
+                                </table:rowActionTemplate>
+                                <table:rowMode>
+                                    <rowmodes:Fixed rowCount="5" />
+                                </table:rowMode>
+                            </table:Table>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
+    </uxap:ObjectPageLayout>
+</mvc:View>
