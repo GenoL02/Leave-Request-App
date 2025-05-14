@@ -20,7 +20,14 @@
         busyIndicatorDelay="{view>delay}"
     >
         <uxap:headerTitle>
-            <uxap:ObjectPageDynamicHeaderTitle />
+            <uxap:ObjectPageDynamicHeaderTitle>
+                <uxap:expandedHeading>
+                    <Title
+                        text="Create Leave Request"
+                        wrapping="true"
+                    />
+                </uxap:expandedHeading>
+            </uxap:ObjectPageDynamicHeaderTitle>
         </uxap:headerTitle>
     </uxap:ObjectPageLayout>
 </mvc:XMLView>

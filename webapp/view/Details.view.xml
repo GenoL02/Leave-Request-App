@@ -55,8 +55,191 @@
                         text="Thông tin người tạo"
                         class="sapUiTinyMarginBottom"
                     />
+                    <HBox class="sapUiTinyMarginBottom">
+                        <ObjectStatus
+                            title="User name"
+                            text="{section>/EmployeeId}"
+                        />
+                    </HBox>
+                    <HBox class="sapUiTinyMarginBottom">
+                        <ObjectStatus
+                            title="Full name"
+                            text="{section>/CreatedBy}"
+                        />
+                    </HBox>
+                    <HBox>
+                        <ObjectStatus
+                            title="CreatedOn"
+                            text="{
+														path:'section>/CreatedOn',
+														formatter: '.formatter.formatDate'
+											}"
+                        />
+                    </HBox>
+                </VBox>
+                <VBox>
+                    <Title
+                        text="Thông tin Process"
+                        class="sapUiTinyMarginBottom"
+                    />
+                    <VBox>
+                        <ObjectStatus
+                            title="Trạng thái"
+                            text="{section>/Status}"
+                            inverted="true"
+                            state="{
+											path:'section>/Status',
+											formatter: '.formatter.formatStatus'
+										}"
+                        />
+                    </VBox>
                 </VBox>
             </HeaderContainer>
         </uxap:headerContent>
+
+        <uxap:sections>
+            <uxap:ObjectPageSection
+                titleUppercase="false"
+                title="Leave Request"
+            >
+                <uxap:subSections>
+                    <uxap:ObjectPageSubSection
+                        titleUppercase="false"
+                        title="Leave Request"
+                    >
+                        <uxap:blocks>
+                            <VBox>
+                                <form:Form
+                                    id="form"
+                                    editable="true"
+                                    binding="{form>/}"
+                                >
+                                    <form:title />
+                                    <form:layout>
+                                        <form:ResponsiveGridLayout
+                                            labelSpanXL="3"
+                                            labelSpanL="3"
+                                            labelSpanM="3"
+                                            labelSpanS="12"
+                                            adjustLabelSpan="false"
+                                            emptySpanXL="4"
+                                            emptySpanL="4"
+                                            emptySpanM="4"
+                                            emptySpanS="0"
+                                            columnsXL="1"
+                                            columnsL="1"
+                                            columnsM="1"
+                                            singleContainerFullSize="false"
+                                        />
+                                    </form:layout>
+                                    <form:formContainers>
+                                        <form:FormContainer>
+                                            <form:formElements>
+                                                <form:FormElement>
+                                                    <form:label>
+                                                        <Label
+                                                            text="Loại phép"
+                                                            required="false"
+                                                        />
+                                                    </form:label>
+                                                    <form:fields>
+                                                        <Select
+                                                            id="LeaveType1"
+                                                            required="true"
+                                                            selectedKey="{form>LeaveType}"
+                                                            forceSelection="false"
+                                                            change="onChangeValue"
+                                                            fieldGroupIds="FormField"
+                                                            editable="false"
+                                                        >
+                                                            <items>
+                                                                <core:Item
+                                                                    text="Nghỉ phép năm"
+                                                                    key="Nghỉ phép năm"
+                                                                />
+                                                                <core:Item
+                                                                    text="Ốm"
+                                                                    key="Ốm"
+                                                                />
+                                                                <core:Item
+                                                                    text="Khác"
+                                                                    key="Khác"
+                                                                />
+                                                            </items>
+                                                        </Select>
+                                                    </form:fields>
+                                                </form:FormElement>
+                                                <form:FormElement>
+                                                    <form:label>
+                                                        <Label
+                                                            text="Ngày bắt đầu"
+                                                            required="false"
+                                                        />
+                                                    </form:label>
+                                                    <form:fields>
+                                                        <DatePicker
+                                                            id="StartDate1"
+                                                            required="true"
+                                                            value="{form>StartDate}"
+                                                            displayFormat="dd.MM.yyyy"
+                                                            valueFormat="yyyyMMdd"
+                                                            change="onChangeValue"
+                                                            fieldGroupIds="FormField"
+                                                            editable="false"
+                                                        />
+                                                    </form:fields>
+                                                </form:FormElement>
+                                                <form:FormElement>
+                                                    <form:label>
+                                                        <Label
+                                                            text="Ngày kết thúc"
+                                                            required="false"
+                                                        />
+                                                    </form:label>
+                                                    <form:fields>
+                                                        <DatePicker
+                                                            id="EndDate1"
+                                                            required="true"
+                                                            value="{form>EndDate}"
+                                                            displayFormat="dd.MM.yyyy"
+                                                            valueFormat="yyyyMMdd"
+                                                            change="onChangeValue"
+                                                            fieldGroupIds="FormField"
+                                                            editable="false"
+                                                        />
+                                                    </form:fields>
+                                                </form:FormElement>
+                                                <form:FormElement>
+                                                    <form:label>
+                                                        <Label
+                                                            text="Lý do xin nghỉ"
+                                                            required="false"
+                                                        />
+                                                    </form:label>
+                                                    <form:fields>
+                                                        <TextArea
+                                                            id="Reason1"
+                                                            required="true"
+                                                            value="{form>Reason}"
+                                                            rows="1"
+                                                            growing="true"
+                                                            growingMaxLines="3"
+                                                            maxLength="255"
+                                                            change="onChangeValue"
+                                                            fieldGroupIds="FormField"
+                                                            editable="false"
+                                                        />
+                                                    </form:fields>
+                                                </form:FormElement>
+                                            </form:formElements>
+                                        </form:FormContainer>
+                                    </form:formContainers>
+                                </form:Form>
+                            </VBox>
+                        </uxap:blocks>
+                    </uxap:ObjectPageSubSection>
+                </uxap:subSections>
+            </uxap:ObjectPageSection>
+        </uxap:sections>
     </uxap:ObjectPageLayout>
 </mvc:View>

@@ -107,7 +107,7 @@ export default class Details extends BaseController {
 
 		this.setViewBusy(true);
 		oDataModel.read("/LeaveRequestSet", {
-			filters: [new Filter("requestId", "EQ", requestId)],
+			filters: [new Filter("RequestId", "EQ", requestId)],
 			success: (response: ODataResponses<[LeaveRequest]>) => {
 				const {
 					LeaveType,
