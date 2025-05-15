@@ -123,7 +123,7 @@
                                             />
                                         </table:template>
                                     </table:Column>
-                                    <table:Column id="LeaveType">
+                                    <table:Column id="LeaveType3">
                                         <table:label>
                                             <Label text="Loại phép" />
                                         </table:label>
