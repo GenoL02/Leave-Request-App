@@ -2,7 +2,10 @@ import type { ODataError, ODataResponses } from "../types/odata";
 import type { LeaveRequest } from "../types/pages/main";
 import type { Dict } from "../types/utils";
 import type View from "sap/ui/core/mvc/View";
-import type { Route$MatchedEvent } from "sap/ui/core/routing/Route";
+import type {
+	Route$BeforeMatchedEvent,
+	Route$MatchedEvent,
+} from "sap/ui/core/routing/Route";
 import type Router from "sap/ui/core/routing/Router";
 import Filter from "sap/ui/model/Filter";
 import JSONModel from "sap/ui/model/json/JSONModel";
@@ -51,6 +54,14 @@ export default class Details extends BaseController {
 		);
 
 		// Router
+		// this.router
+		// 	.getRoute("details")
+		// 	?.attachBeforeMatched((oEvent: Route$BeforeMatchedEvent) => {
+		// 		setTimeout(() => {
+		// 			this.getRouter().navTo("RouteMain"); // hoặc quay về Home
+		// 		}, 0);
+		// 		return false;
+		// 	}, this);
 		this.router.getRoute("details")?.attachMatched(this.onObjectMatched);
 	}
 
@@ -86,8 +97,12 @@ export default class Details extends BaseController {
 			});
 	};
 
-	public onBackToWorkList() {
-		this.getRouter().navTo("RouteMain");
+	public onBackToWorkList(router: Router = undefined) {
+		if (this.getRouter() === undefined) {
+			router.navTo("RouteMain");
+		} else {
+			this.getRouter().navTo("RouteMain");
+		}
 	}
 
 	//endregion
@@ -139,6 +154,7 @@ export default class Details extends BaseController {
 			},
 			error: (error: ODataError) => {
 				this.setViewBusy(false);
+				console.error(error);
 			},
 		});
 	}
