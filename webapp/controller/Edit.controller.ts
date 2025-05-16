@@ -18,6 +18,7 @@ import JSONModel from "sap/ui/model/json/JSONModel";
 import type ODataModel from "sap/ui/model/odata/v2/ODataModel";
 import BaseController from "./Base.controller";
 import Details from "./Details.controller";
+import Create from "./Create.controller";
 
 /**
  * @namespace myapp.ui5.controller
@@ -98,7 +99,8 @@ export default class Edit extends BaseController {
 	};
 
 	public onBackToWorkList() {
-		this.getRouter().navTo("RouteMain");
+		const details = new Details("");
+		details.onBackToWorkList(this.getRouter());
 	}
 	// #endregion
 
@@ -110,7 +112,6 @@ export default class Edit extends BaseController {
 
 	private onGetData() {
 		const oDataModel = this.getModel<ODataModel>();
-
 		const sectionModel = this.getModel("section");
 		const formModel = this.getModel("form");
 
@@ -150,13 +151,13 @@ export default class Edit extends BaseController {
 			},
 			error: (error: ODataError) => {
 				this.setViewBusy(false);
+				console.log(error);
 			},
 		});
 	}
 
 	public onSaveDraftProcess() {
 		const oDataModel = this.getModel<ODataModel>();
-
 		const sectionModel = this.getModel("section");
 		const formModel = this.getModel("form");
 

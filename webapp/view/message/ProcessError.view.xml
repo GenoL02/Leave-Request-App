@@ -1,0 +1,21 @@
+<mvc:View
+    controllerName="myapp.ui5s.controller.WorkList"
+    xmlns:mvc="sap.ui.core.mvc"
+    xmlns="sap.m"
+>
+    <IllustratedMessage
+        illustrationSize="Auto"
+        illustrationType="sapIllus-ErrorScreen"
+        enableVerticalResponsiveness="true"
+        enableDefaultTitleAndDescription="false"
+        title="{global>/MessageTitle}"
+        description="{global>/MessageDescription}"
+    >
+        <additionalContent>
+            <Button
+                text="Back to Work List"
+                press="onPressed"
+            />
+        </additionalContent>
+    </IllustratedMessage>
+</mvc:View>

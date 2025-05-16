@@ -148,7 +148,7 @@
                                                             required="true"
                                                             selectedKey="{form>LeaveType}"
                                                             forceSelection="false"
-                                                            change="onChangeValue"
+                                                            liveChange="onChangeValue"
                                                             fieldGroupIds="FormField"
                                                         >
                                                             <items>
@@ -225,7 +225,7 @@
                                                             growing="true"
                                                             growingMaxLines="3"
                                                             maxLength="255"
-                                                            change="onChangeValue"
+                                                            liveChange="onChangeValue"
                                                             fieldGroupIds="FormField"
                                                         />
                                                     </form:fields>

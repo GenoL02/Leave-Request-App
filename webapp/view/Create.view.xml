@@ -144,7 +144,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <DatePicker
-                                                            id="StartDate2"
+                                                            id="StartDate"
                                                             required="true"
                                                             value="{form>StartDate}"
                                                             displayFormat="dd.MM.yyyy"
@@ -163,7 +163,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <DatePicker
-                                                            id="EndDate2"
+                                                            id="EndDate"
                                                             required="true"
                                                             value="{form>EndDate}"
                                                             displayFormat="dd.MM.yyyy"
@@ -182,7 +182,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <TextArea
-                                                            id="Reason2"
+                                                            id="Reason"
                                                             required="true"
                                                             value="{form>Reason}"
                                                             rows="3"
@@ -211,7 +211,14 @@
                     text="Save Draft"
                     type="Ghost"
                     icon="sap-icon://save"
+                    press="onSaveDraftProcess"
+                />
+                <Button
+                    text="Send"
+                    type="Emphasized"
+                    icon="sap-icon://paper-plane"
                     press="onSubmitProcess"
+                    enabled="{view>/canSubmit}"
                 />
             </OverflowToolbar>
         </uxap:footer>

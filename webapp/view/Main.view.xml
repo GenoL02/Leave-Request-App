@@ -63,8 +63,8 @@
                         <uxap:blocks>
                             <table:Table
                                 id="table"
-                                enableSelectAll="false"
-                                selectionMode="Single"
+                                enableSelectAll="true"
+                                selectionMode="MultiToggle"
                                 enableBusyIndicator="true"
                                 rowSelectionChange="onRowSelectionChange"
                                 busyIndicatorDelay="{view>/delay}"
@@ -121,6 +121,17 @@
                                                 titleActive="true"
                                                 titlePress="onNavigateToDetails"
                                             />
+                                        </table:template>
+                                    </table:Column>
+                                    <table:Column
+                                        id="EmployeeId"
+                                        width="8rem"
+                                    >
+                                        <table:label>
+                                            <Label text="Người gửi" />
+                                        </table:label>
+                                        <table:template>
+                                            <Text text="{table>EmployeeId}" />
                                         </table:template>
                                     </table:Column>
                                     <table:Column id="LeaveType3">
