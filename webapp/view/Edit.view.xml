@@ -10,7 +10,7 @@
     controllerName="myapp.ui5.controller.Edit"
 >
     <uxap:ObjectPageLayout
-        id="createObjectPageLayout2"
+        id="createObjectPageLayout"
         enableLazyLoading="true"
         useIconTabBar="true"
         showTitleInHeaderContent="true"
@@ -110,7 +110,7 @@
                         <uxap:blocks>
                             <VBox>
                                 <form:Form
-                                    id="form2"
+                                    id="form"
                                     editable="true"
                                     binding="{form>/}"
                                 >
@@ -144,7 +144,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <Select
-                                                            id="LeaveType2"
+                                                            id="LeaveType"
                                                             required="true"
                                                             selectedKey="{form>LeaveType}"
                                                             forceSelection="false"
@@ -178,7 +178,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <DatePicker
-                                                            id="StartDate3"
+                                                            id="StartDate"
                                                             required="true"
                                                             value="{form>StartDate}"
                                                             displayFormat="dd.MM.yyyy"
@@ -198,7 +198,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <DatePicker
-                                                            id="EndDate3"
+                                                            id="EndDate"
                                                             required="true"
                                                             value="{form>EndDate}"
                                                             displayFormat="dd.MM.yyyy"
@@ -218,7 +218,7 @@
                                                     </form:label>
                                                     <form:fields>
                                                         <TextArea
-                                                            id="Reason3"
+                                                            id="Reason"
                                                             required="true"
                                                             value="{form>Reason}"
                                                             rows="1"
@@ -241,7 +241,7 @@
             </uxap:ObjectPageSection>
         </uxap:sections>
         <uxap:footer>
-            <OverflowToolbar id="footer2">
+            <OverflowToolbar id="footer">
                 <ToolbarSpacer />
                 <Button
                     text="Save Draft"
@@ -254,6 +254,7 @@
                     type="Emphasized"
                     icon="sap-icon://paper-plane"
                     press="onSubmitProcess"
+                    enabled="{view>/canSubmit}"
                 />
             </OverflowToolbar>
         </uxap:footer>
