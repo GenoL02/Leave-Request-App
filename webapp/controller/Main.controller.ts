@@ -116,12 +116,16 @@ export default class Main extends BaseController {
 		} else if (!selectedRow || !indices.length) {
 			tableModel.setProperty("/selectedRows", []);
 		} else {
-			// const nextRows = xorBy(prevSelectedRows, [selectedRow], (item) => item.Employeeid); // MultiToggle
 			const nextRows = xorBy(
 				prevSelectedRows,
 				[selectedRow],
 				(item) => item.RequestId
-			).slice(-1); // Single
+			); // MultiToggle
+			// const nextRows = xorBy(
+			// 	prevSelectedRows,
+			// 	[selectedRow],
+			// 	(item) => item.RequestId
+			// ).slice(-1); // Single
 
 			tableModel.setProperty("/selectedRows", nextRows);
 		}
@@ -189,29 +193,50 @@ export default class Main extends BaseController {
 		const selectedRows = <LeaveRequest[]>(
 			this.getModel("table").getProperty("/selectedRows")
 		);
+		if (!selectedRows.length) {
+			MessageToast.show("No rows selected");
+			return;
+		}
+		const item = selectedRows;
 
-		const item = selectedRows[0];
+		MessageBox.confirm(
+			`Do you want to delete ${selectedRows.length} selected request(s)?`,
+			{
+				actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
+				emphasizedAction: MessageBox.Action.DELETE,
+				onClose: (action: unknown) => {
+					if (action === MessageBox.Action.DELETE) {
+						const deletePromises = item.map(async (item1) => {
+							try {
+								const key = oDataModel.createKey("/LeaveRequestSet", item1);
 
-		MessageBox.confirm("Do you want to delete this request?", {
-			actions: [MessageBox.Action.DELETE, MessageBox.Action.CANCEL],
-			emphasizedAction: MessageBox.Action.DELETE,
-			onClose: (action: unknown) => {
-				if (action === MessageBox.Action.DELETE) {
-					const key = oDataModel.createKey("/LeaveRequestSet", item);
+								const promise = await new Promise((resolve, reject) => {
+									oDataModel.remove(key, {
+										success: () => {
+											MessageToast.show("Request was successfully deleted");
 
-					oDataModel.remove(key, {
-						success: () => {
-							MessageToast.show("Request was successfully deleted");
+											this.onGetData();
 
-							this.onGetData();
-						},
-						error: () => {
-							MessageToast.show("An error occurred, please try again later");
-						},
-					});
-				}
-			},
-		});
+											resolve(true);
+										},
+										error: (error: Error) => {
+											MessageToast.show(
+												"An error occurred, please try again later"
+											);
+											reject(error);
+										},
+									});
+								});
+								return promise;
+							} catch (error) {
+								MessageToast.show("An error occurred, please try again later");
+								console.error(error);
+							}
+						});
+					}
+				},
+			}
+		);
 	}
 	// #endregion
 
@@ -295,6 +320,7 @@ export default class Main extends BaseController {
 			await sheet.build();
 		} catch (error) {
 			MessageToast.show("An error occurred, please try again later");
+			console.error(error);
 		} finally {
 			sheet.destroy();
 		}

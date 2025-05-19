@@ -46,6 +46,14 @@ export default class Approve extends BaseController {
 			"table"
 		);
 
+		this.setModel(
+			new JSONModel({
+				busy: true,
+				delay: this.view.getBusyIndicatorDelay(),
+			}),
+			"view"
+		);
+
 		// Router
 		this.router.getRoute("approve")?.attachMatched(this.onObjectMatched);
 	}
@@ -130,4 +138,249 @@ export default class Approve extends BaseController {
 			tableModel.setProperty("/selectedRows", nextRows);
 		}
 	}
+
+	public onApproveProcess() {
+		MessageBox.confirm("Do you want to approve this request?", {
+			actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+			emphasizedAction: MessageBox.Action.OK,
+			onClose: (action: unknown) => {
+				if (action === MessageBox.Action.OK) {
+					const oDataModel = this.getModel<ODataModel>();
+					const selectedRows = <LeaveRequest[]>(
+						this.getModel("table").getProperty("/selectedRows")
+					);
+
+					const item = selectedRows[0];
+
+					this.setViewBusy(true);
+					oDataModel.create(
+						"/ApproveRequestSet",
+						{
+							...item,
+							requestId: item.RequestId,
+							action: "Approve",
+						},
+						{
+							success: (response: ODataResponses<LeaveRequest[]>) => {
+								this.setViewBusy(false);
+								MessageToast.show("Request has been approved");
+								this.onGetData();
+								console.log(response);
+							},
+							error: (error: ODataError) => {
+								this.setViewBusy(false);
+								console.error(error);
+							},
+						}
+					);
+				}
+			},
+		});
+	}
+
+	public onRejectProcess() {
+		MessageBox.confirm("Do you want to reject this request?", {
+			title: "comfirmation",
+			actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+			emphasizedAction: MessageBox.Action.OK,
+			onClose: (action: unknown) => {
+				if (action === MessageBox.Action.OK) {
+					const oDataModel = this.getModel<ODataModel>();
+					const selectedRows = <LeaveRequest[]>(
+						this.getModel("table").getProperty("/selectedRows")
+					);
+					const item = selectedRows[0];
+					this.setViewBusy(true);
+					oDataModel.create(
+						"/ApproveRequestSet",
+						{
+							...item,
+							RequestId: item.RequestId,
+							action: "Reject",
+						},
+						{
+							success: (response: ODataResponses<LeaveRequest>) => {
+								this.setViewBusy(false);
+								MessageToast.show("Request has been rejected");
+								this.onGetData();
+								console.log(response);
+							},
+							error: (error: ODataError) => {
+								this.setViewBusy(false);
+								console.error(error);
+							},
+						}
+					);
+				}
+			},
+		});
+	}
+	public onApproveRequest(event: RowActionItem$PressEvent) {
+		MessageBox.confirm("Do you want to approve this request?", {
+			actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+			emphasizedAction: MessageBox.Action.OK,
+			onClose: (action: unknown) => {
+				if (action === MessageBox.Action.OK) {
+					const oDataModel = this.getModel<ODataModel>();
+
+					const row = event.getParameter("row");
+
+					const item = <LeaveRequest>(
+						row.getBindingContext("table")?.getObject()
+					);
+
+					this.setViewBusy(true);
+					oDataModel.create(
+						"/ApproveRequestSet",
+						{
+							...item,
+							RequestId: item.RequestId,
+							Action: "Approve",
+						},
+						{
+							success: (response: ODataResponses<LeaveRequest>) => {
+								this.setViewBusy(false);
+
+								MessageToast.show("Request has been approved");
+								this.onGetData();
+								console.log(response);
+							},
+							error: (error: ODataError) => {
+								this.setViewBusy(false);
+								console.error(error);
+							},
+						}
+					);
+				}
+			},
+		});
+	}
+	public onRejectRequest(event: RowActionItem$PressEvent) {
+		MessageBox.error("Do you want to reject this request?", {
+			title: "Confirmation",
+			actions: [MessageBox.Action.OK, MessageBox.Action.CANCEL],
+			emphasizedAction: MessageBox.Action.OK,
+			onClose: (action: unknown) => {
+				if (action === MessageBox.Action.OK) {
+					const oDataModel = this.getModel<ODataModel>();
+
+					const row = event.getParameter("row");
+
+					const item = <LeaveRequest>(
+						row.getBindingContext("table")?.getObject()
+					);
+
+					this.setViewBusy(true);
+					oDataModel.create(
+						"/ApproveRequestSet",
+						{
+							...item,
+							RequestId: item.RequestId,
+							Action: "Reject",
+						},
+						{
+							success: (response: ODataResponses<LeaveRequest>) => {
+								this.setViewBusy(false);
+
+								MessageToast.show("Request has been rejected");
+								this.onGetData();
+								console.log(response);
+							},
+							error: (error: ODataError) => {
+								this.setViewBusy(false);
+								console.error(error);
+							},
+						}
+					);
+				}
+			},
+		});
+	}
+	// #endregion
+
+	// #region Export
+	public async onExportExcel() {
+		const rows = <LeaveRequest[]>this.getModel("table").getProperty("/rows");
+
+		if (!rows.length) {
+			MessageToast.show("No data to export");
+			return;
+		}
+
+		// Format data
+		const dataSource = rows.map((item) => {
+			return Object.keys(item).reduce<Dict>((acc, key) => {
+				const value = item[key as keyof LeaveRequest];
+
+				switch (key) {
+					case "__metadata": {
+						break;
+					}
+					// case "LeaveType": {
+					//   acc[key] = value + " XXX";
+					//   break;
+					// }
+					default: {
+						acc[key] = value;
+						break;
+					}
+				}
+				return acc;
+			}, {});
+		});
+
+		const columns = this.table
+			.getColumns()
+			.filter((column) => {
+				return ![""].includes(this.getControlId(column));
+			})
+			.map<ExcelColumn>((column) => {
+				const columnId = this.getControlId(column);
+				const label = (<Label>column.getLabel()).getText();
+				const width = column.getWidth();
+
+				switch (columnId) {
+					case "StartDate":
+					case "EndDate": {
+						return {
+							label,
+							property: columnId,
+							type: EdmType.DateTime,
+							width,
+						};
+					}
+					default: {
+						return {
+							label,
+							property: columnId,
+							type: EdmType.String,
+							width,
+						};
+					}
+				}
+			});
+
+		const sheet = new Spreadsheet({
+			workbook: {
+				columns,
+				hierarchyLevel: "Level",
+				context: {
+					sheetName: "Leave Request",
+				},
+			},
+			dataSource,
+			fileName: `Leave_Request_Export_${this.formatter.dateNow()}`,
+			worker: true,
+		});
+
+		try {
+			await sheet.build();
+		} catch (error) {
+			MessageToast.show("An error occurred, please try again later");
+			console.error(error);
+		} finally {
+			sheet.destroy();
+		}
+	}
+	// #endregion
 }
